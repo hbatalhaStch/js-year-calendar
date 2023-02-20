@@ -208,6 +208,21 @@ test('instantiate calendar with round limits', () => {
     expect(Array.from(getDay(6, 20).classList)).toContain("round-right");
 });
 
+test('instantiate calendar with round limits for one day long event', () => {
+    const calendar = new Calendar('#calendar', {
+        style: 'background',
+        roundRangeLimits: true,
+		dataSource: [
+			{
+				startDate: new Date(currentYear, 6, 10),
+				endDate: new Date(currentYear, 6, 10)
+			}
+		]
+    });
+
+    expect(Array.from(getDay(6, 10).classList)).toContain("round-left-right");
+});
+
 test('instantiate calendar with disable days', () => {
     const calendar = new Calendar('#calendar', {
 		disabledDays: [
