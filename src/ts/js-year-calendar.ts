@@ -728,7 +728,31 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 				
 				var currentTime = currentDate.getTime();
 				
-				if (events[events.length - 1].startDate.getTime() == currentTime)
+				if (events[events.length - 1].startDate.getTime() == currentTime && events[events.length - 1].endDate.getTime() == currentTime) {
+					parent.classList.add('day-start');
+
+					if (events[events.length - 1].startHalfDay || events[events.length - 1].endHalfDay &&
+						(events[events.length - 1].startHalfDay !== events[events.length - 1].endHalfDay)) {
+						parent.classList.add('day-half');
+
+						// Find color for other half
+						var otherColor = 'transparent';
+						for (var i = events.length - 2; i >= 0; i--) {
+							if (events[i].startDate.getTime() != currentTime || (!events[i].startHalfDay && !events[i].endHalfDay && !this.options.alwaysHalfDay)) {
+								otherColor = events[i].color;
+								break;
+							}
+						}
+
+						const deg = events[events.length - 1].startHalfDay ? '-45deg' : '135deg'
+
+						parent.style.background = `linear-gradient(${deg}, ${events[events.length - 1].color}, ${events[events.length - 1].color} 49%, ${otherColor} 51%, ${otherColor})`;
+					}
+					else if (this.options.roundRangeLimits) {
+						parent.classList.add('round-left-right');
+					}
+				}
+				else if (events[events.length - 1].startDate.getTime() == currentTime)
 				{
 					parent.classList.add('day-start');
 					
